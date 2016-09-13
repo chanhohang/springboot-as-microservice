@@ -1,0 +1,8 @@
+dependencies {
+  compile group: 'javax.interceptor', name: 'javax.interceptor-api', version: '1.2'
+  compile group: 'net.rc.lab.springboot', name: 'entities', version: Versions.'self'
+  
+  // Test Dependency
+  testCompile group: 'net.rc.lab.springboot', name: 'test-helper', version: Versions.'self'
+
+}

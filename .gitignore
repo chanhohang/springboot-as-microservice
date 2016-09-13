@@ -1,0 +1,7 @@
+/database/build
+.settings
+.gradle
+.project
+.classpath
+.checkstyle
+/build/
