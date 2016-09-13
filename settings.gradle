@@ -1,0 +1,11 @@
+include 'database', 'entities', 'testhelper', 'core', 'gateway-application', 'auth-application', 'resource-application', 'ui-application'
+rootProject.name = 'springboot-as-microservice'
+
+project(":database").name = "database"
+project(":entities").name = "entities"
+project(":testhelper").name = "test-helper"
+project(":core").name = "core"
+project(":gateway-application").name = "gateway"
+project(":auth-application").name = "auth"
+project(":resource-application").name = "resource"
+project(":ui-application").name = "ui"

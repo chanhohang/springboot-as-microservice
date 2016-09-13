@@ -1,0 +1,20 @@
+dependencies {
+  compile group: 'net.rc.lab.springboot', name: 'entities', version: Versions.'self'
+
+  // Test Dependency
+  compile group: 'org.springframework', name: 'spring-test', version: Versions.'spring-framework'
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: Versions.'spring-boot' 
+  compile group: 'org.springframework.security', name: 'spring-security-test', version: Versions.'spring-security'
+  compile group: 'org.jbehave', name: 'jbehave-core', version: Versions.'jbehave'
+  compile group: 'org.jbehave', name: 'jbehave-spring', version: Versions.'jbehave'
+  compile group: 'com.jayway.jsonpath', name: 'json-path', version: Versions.'jsonpath'
+  compile group: 'junit', name: 'junit', version: Versions.'junit'
+  compile group: 'org.mockito', name: 'mockito-core', version: Versions.'mockito'
+  compile group: 'com.h2database', name: 'h2', version: Versions.'h2'
+  compile group: 'org.assertj', name: 'assertj-core', version: Versions.'assertj'
+  compile group: 'org.glassfish', name: 'javax.el', version: Versions.'javax.el'
+  compile group: 'com.typesafe.akka', name: 'akka-testkit_2.11', version: Versions.'akka'
+  compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.21'
+  compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
+  
+}
