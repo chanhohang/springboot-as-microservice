@@ -1,1 +1,8 @@
+/node_modules/
+/bower_components/
+buildInfo.properties
 /build/
+/bin/
+/logs/
+.DS_Store
+/classes/

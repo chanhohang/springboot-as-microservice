@@ -1,0 +1,1 @@
+java -Dlogging.config=logback.xml -jar auth.war --spring.config.location=application.properties

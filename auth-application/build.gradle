@@ -1,0 +1,85 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+task npmBuild(type: Exec){
+  if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+    commandLine 'cmd', '/c', 'npm', 'install'
+  } else {
+    commandLine 'npm', 'install'
+  }
+}
+
+apply plugin: 'war'
+apply plugin: 'jetty'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'spring-boot'
+apply plugin: "com.moowork.gulp"
+
+description = "rclab auth service"
+
+sourceSets.main.java.srcDir 'src/main/webapp'
+
+defaultTasks 'makeReleaseZip'
+
+dependencies {
+
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: Versions.'spring-boot'
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: Versions.'spring-boot'
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: Versions.'spring-boot'
+  compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul', version: Versions.'spring-zuul'
+
+  compile group: 'net.rc.lab.springboot', name: 'entities', version: Versions.'self'
+  compile group: 'net.rc.lab.springboot', name: 'core', version: Versions.'self'
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: Versions.'spring-boot'
+  compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: Versions.'spring-security-oauth2'
+  compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.4.RELEASE'
+  compile group: 'mysql', name: 'mysql-connector-java', version: Versions.'mysql'
+
+  // Test Dependency
+  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: Versions.'spring-boot'
+  testCompile group: 'net.rc.lab.springboot', name: 'test-helper', version: Versions.'self'
+
+}
+
+task copyConf(type: Copy) {
+  from ('conf') {
+    include '**/*.properties'
+    include '**/*.xml'
+  }
+  into "$buildDir/package/"
+}
+
+task copyScript(type: Copy) {
+  from ('script') {
+    include '**/*.bat'
+    include '**/*.sh'
+  }
+  into "$buildDir/package/"
+}
+
+task copyWar(type: Copy) {
+  from war.archivePath
+  into "$buildDir/package/"
+  rename '.*.war', 'auth.war'
+}
+
+task createBuildInfoFile (dependsOn: processResources) << {
+  File buildInfoFile = file('src/main/resources/buildInfo.properties')
+  Date startDate = new Date()
+  Properties props = new Properties()
+  props.setProperty('build.version', project.version.toString()) // see gradle.properties
+  props.setProperty('build.timestamp', startDate.format("yyyy-MM-dd'T'HH:mm:ssZ"))
+  props.setProperty('build.name', "rc-lab")
+  props.setProperty('build.description', project.description.toString()) // See above
+  props.store(buildInfoFile.newWriter(), null)
+}
+
+task makeReleaseZip(type: Zip) {
+  dependsOn 'build'
+  from(project.buildDir.path + '/package') { include '*.*' }
+}
+
+// Build Task dependencies
+tasks.withType(Javadoc).all { enabled = false }
+//gulp_prod.dependsOn 'npmBuild'
+//war.dependsOn gulp_prod
+build.dependsOn copyConf,copyScript,copyWar
+compileJava.dependsOn createBuildInfoFile
