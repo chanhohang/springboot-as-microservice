@@ -4,6 +4,13 @@
 
 SET foreign_key_checks = 0;
 
+DROP TABLE IF EXISTS `REVINFO`;
+CREATE TABLE `REVINFO` (
+  `REV` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Revision number',
+  `REVTSTMP` bigint(20) NOT NULL COMMENT 'Timestamp of the revision in epoch time',
+  PRIMARY KEY (`REV`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='This Table is the table to keep track of audit table data';
+
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `RoleId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',

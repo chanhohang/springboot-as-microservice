@@ -1,0 +1,46 @@
+dependencies {
+  compile group: 'net.rc.lab.springboot', name: 'entities', version: Versions.'self'
+  compile group: 'net.rc.lab.springboot', name: 'core', version: Versions.'self'
+  compile group: 'org.springframework.batch', name: 'spring-batch-core', version: Versions.'spring-batch'
+  compile group: 'org.slf4j', name: 'slf4j-api', version: Versions.'slf4j'
+  compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: Versions.'slf4j'
+  compile group: 'ch.qos.logback', name:'logback-classic', version: Versions.'logback'
+  compile group: 'javax.servlet', name: 'javax.servlet-api', version: Versions.'javax.servlet-api'
+  compile group: 'javax.el', name: 'javax.el-api', version: Versions.'javax.el'
+  compile group: 'mysql', name: 'mysql-connector-java', version: Versions.'mysql'
+
+  // Test Dependency
+  testCompile group: 'net.rc.lab.springboot', name: 'test-helper', version: Versions.'self'
+}
+
+def mainClassName = 'net.rc.lab.springboot.importer.console.ImporterConsole'
+tasks.withType(Javadoc).all { enabled = false }
+
+jar {
+  manifest {
+    attributes "Main-Class": "$mainClassName"
+  }
+}
+
+task copyToLib(type: Copy) {
+  into "$buildDir/libs"
+  from configurations.runtime
+}
+
+defaultTasks 'dist'
+
+task dist(dependsOn: ['build','copyToLib'], type: Zip){
+  archiveName = "${project.name}-${version}.zip"
+  into('lib'){
+    from "$buildDir/libs"
+  }
+  into('bin'){
+    from('script')
+  }
+  into('data'){
+    from('data')
+  }
+  into('conf'){
+    from('conf')
+  }
+}

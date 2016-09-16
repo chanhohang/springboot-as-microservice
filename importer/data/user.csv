@@ -1,0 +1,3 @@
+Id,Password,Role,Company,Email,Phone No,Mobile No
+test,test,Buyer,"Test Company 1",test@test.com,123456,123456
+test2,test2,Seller,"Test Company 2",test@test.com,123456,123456

@@ -9,14 +9,14 @@ ext {
 
     // Internal
     'self'            : project.version,
-    
+
     // Core
     'spring-framework'      : '4.3.1.RELEASE',
     'spring-security'       : '4.1.1.RELEASE',
     'spring-data-jpa'       : '1.9.4.RELEASE',
     'spring-batch'          : '3.0.6.RELEASE',
     'spring-boot'           : '1.3.3.RELEASE',
-	'spring-zuul'			: '1.1.6.RELEASE',
+    'spring-zuul'           : '1.1.6.RELEASE',
     'javax.transaction-api' : '1.2',
     'hibernate'             : '4.3.11.Final',
     'hibernate-validator'   : '5.2.1.Final',
@@ -34,7 +34,7 @@ ext {
     'javax.servlet-api'     : '3.0.1',
     'mysql'                 : '5.1.38',
     'akka'                  : '2.4.7',
-    
+
     // Test
     'mockito'               : '1.10.19',
     'junit'                 : '4.12',
@@ -85,7 +85,7 @@ subprojects {
   group = 'net.rc.lab.springboot'
 
   repositories {
-	mavenCentral()
+    mavenCentral()
     mavenLocal()
   }
 
@@ -157,7 +157,9 @@ project(':test-helper').go.dependsOn ':entities:go', ':test-helper:build', ':tes
 
 project(':core').go.dependsOn ':test-helper:go', ':core:build', ':core:install'
 
-project(':gateway').go.dependsOn ':core:go', ':gateway:build', ':gateway:makeReleaseZip'
+project(':importer').go.dependsOn ':core:go', ':importer:build', ':importer:makeReleaseZip'
+
+project(':gateway').go.dependsOn ':importer:go', ':gateway:build', ':gateway:makeReleaseZip'
 
 project(':auth').go.dependsOn ':gateway:go', ':auth:build', ':auth:makeReleaseZip'
 

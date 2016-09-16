@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                            http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+                            http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd" >
+
+  <context:annotation-config />
+
+  <context:component-scan base-package="net.rc.lab.springboot" />
+
+  <bean id="propertiesLocation" class="java.lang.String">
+    <constructor-arg value="classpath:conf" />
+  </bean>
+
+  <bean id="hibernateProperties"
+    class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <property name="ignoreResourceNotFound" value="true" />
+    <property name="properties">
+      <props>
+        <prop key="hibernate.connection.driver_class">#{systemProperties['db.driver']}</prop>
+        <prop key="hibernate.connection.url">#{systemProperties['db.url']}</prop>
+        <prop key="hibernate.connection.useUnicode">true</prop>
+        <prop key="hibernate.connection.characterEncoding">UTF-8</prop>
+        <prop key="hibernate.connection.username">#{systemProperties['db.user']}</prop>
+        <prop key="hibernate.connection.password">#{systemProperties['db.password']}</prop>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.hbm2ddl.auto">none</prop>
+        <prop key="hibernate.format_sql">true</prop>
+        <prop key="hibernate.connection.provider_class">org.hibernate.c3p0.internal.C3P0ConnectionProvider</prop>
+        <prop key="hibernate.c3p0.max_size">1</prop>
+        <prop key="hibernate.c3p0.min_size">1</prop>
+        <prop key="hibernate.c3p0.timeout">120</prop>
+        <prop key="hibernate.c3p0.max_statements">100</prop>
+        <prop key="hibernate.c3p0.idle_test_period">120</prop>
+        <prop key="hibernate.c3p0.acquire_increment">1</prop>
+        <prop key="hibernate.c3p0.automatic_test_table">C3P0TestTable</prop>
+      </props>
+    </property>
+  </bean>
+
+ <bean id="dataSource"
+  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+  <property name="driverClassName" value="#{systemProperties['db.driver']}" />
+  <property name="url" value="#{systemProperties['db.url']}" />
+  <property name="username" value="#{systemProperties['db.user']}" />
+  <property name="password" value="#{systemProperties['db.password']}" />
+ </bean>
+ 
+  <bean id="entityManagerFactory"
+    class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="jpaProperties" ref="hibernateProperties" />
+    <property name="jpaVendorAdapter">
+      <bean
+        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+    </property>
+    <property name="packagesToScan">
+      <list>
+        <value>net.rc.lab.springboot.entities.**</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean class="org.springframework.orm.jpa.JpaTransactionManager"
+    id="transactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory" />
+  </bean>
+
+  <tx:annotation-driven transaction-manager="transactionManager" />
+  <jpa:repositories base-package="net.rc.lab.springboot.core" />
+</beans>
